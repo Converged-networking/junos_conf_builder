@@ -1,0 +1,15 @@
+{% if 'ssh' in config.system.services %}
+ssh {
+    {% filter indent(4, true) %}
+    {% include 'ex/system/services/ssh.j2' %}
+    {% endfilter %}
+}
+{% endif %}
+{% if 'netconf' in config.system.services %}
+netconf {
+    {% filter indent(4, true) %}
+    {% include 'ex/system/services/netconf.j2' %}
+    {% endfilter %}
+}
+{% endif %}
+

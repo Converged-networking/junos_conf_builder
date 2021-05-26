@@ -1,0 +1,4 @@
+{% for server in config.system.ntp.server %}
+server {{ server.name }}{% if 'prefer' in server %} prefer{% endif %};
+{% endfor %}
+

@@ -1,0 +1,9 @@
+#jinja2: lstrip_blocks: "true", trim_blocks: "false"
+{% set config = configuration %}
+{# Device Configuration #}
+{# system settings #}
+system {
+    {% filter indent(4, true) %}
+    {% include 'ex/system/main.j2' %}
+    {% endfilter %}
+}

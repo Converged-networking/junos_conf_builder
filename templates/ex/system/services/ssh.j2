@@ -1,0 +1,25 @@
+{% if 'root-login' in config.system.services.ssh %}
+root-login {{ config.system.services.ssh.get('root-login') }};
+{% endif %}
+{% if 'no-tcp-forwarding' in config.system.services.ssh %}
+no-tcp-forwarding;
+{% endif %}
+{% if 'protocol-version' in config.system.services.ssh %}
+protocol-version {{ config.system.services.ssh.get('protocol-version')[0] }};
+{% endif %}
+{% if 'max-sessions-per-connection' in config.system.services.ssh %}
+max-sessions-per-connection {{ config.system.services.ssh.get('max-sessions-per-connection') }};
+{% endif %}
+{% if 'client-alive-count-max' in config.system.services.ssh %}
+client-alive-count-max {{ config.system.services.ssh.get('client-alive-count-max') }};
+{% endif %}
+{% if 'client-alive-interval' in config.system.services.ssh %}
+client-alive-interval {{ config.system.services.ssh.get('client-alive-interval') }};
+{% endif %}
+{% if 'connection-limit' in config.system.services.ssh %}
+connection-limit {{ config.system.services.ssh.get('connection-limit') }};
+{% endif %}
+{% if 'rate-limit' in config.system.services.ssh %}
+rate-limit {{ config.system.services.ssh.get('rate-limit') }};
+{% endif %}
+

@@ -1,0 +1,59 @@
+{%- macro syslog_content(contents) -%}
+    {%- for content in contents -%}
+        {% if 'any' in content %}
+    {{ content.name }} any;
+        {% endif %}
+        {% if 'emergency' in content %}
+    {{ content.name }} emergency;
+        {% endif %}
+        {% if 'warning' in content %}
+    {{ content.name }} warning;
+        {% endif %}
+        {% if 'info' in content %}
+    {{ content.name }} info;
+        {% endif %}
+    {%- endfor -%}
+{%- endmacro -%}
+{# Config for syslog user #}
+{% if 'user' in config.system.syslog %}
+    {% for item in config.system.syslog.user %}
+user {{ item.name }} {
+{{ syslog_content(item.contents) -}}
+        {% if 'match' in item %}
+    match "{{ item.get('match') }}";
+        {% endif %}
+        {% if 'port' in item %}
+    port {{ item.get('port') }};
+        {% endif %}
+}
+    {% endfor %}
+{% endif %}
+{# Config for syslog host #}
+{% if 'host' in config.system.syslog %}
+    {% for item in config.system.syslog.host %}
+host {{ item.name }} {
+{{ syslog_content(item.contents) -}}
+        {% if 'match' in item %}
+    match "{{ item.get('match') }}";
+        {% endif %}
+        {% if 'port' in item %}
+    port {{ item.get('port') }};
+        {% endif %}
+}
+    {% endfor %}
+{% endif %}
+{# Config for syslog file #}
+{% if 'file' in config.system.syslog %}
+    {% for item in config.system.syslog.file %}
+file {{ item.name }} {
+{{ syslog_content(item.contents) -}}
+        {% if 'match' in item %}
+    match "{{ item.get('match') }}";
+        {% endif %}
+        {% if 'port' in item %}
+    port {{ item.get('port') }};
+        {% endif %}
+}
+    {% endfor %}
+{% endif %}
+

@@ -1,0 +1,4 @@
+{% if 'encrypted-password' in config.system.get('root-authentication') %}
+encrypted-password "{{ config.system.get('root-authentication').get('encrypted-password') }}"; ## SECRET-DATA
+{% endif %}
+

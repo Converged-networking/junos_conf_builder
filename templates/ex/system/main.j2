@@ -1,0 +1,92 @@
+{% if 'commit' in config.system %}
+{% include 'ex/system/commit.j2' %}
+{% endif %}
+{% if 'login' in config.system %}
+login {
+    {% filter indent(4, true) %}
+    {% include 'ex/system/login.j2' %}
+    {% endfilter %}
+}
+{% endif %}
+{% if 'root-authentication' in config.system %}
+root-authentication {
+    {% filter indent(4, true) %}
+    {% include 'ex/system/root-authentication.j2' %}
+    {% endfilter %}
+}
+{% endif %}
+{% if 'services' in config.system %}
+services {
+    {% filter indent(4, true) %}
+    {% include 'ex/system/services/main.j2' %}
+    {% endfilter %}
+}
+{% endif %}
+{% if 'host-name' in config.system %}
+host-name {{ config.system.get('host-name') }};
+{% endif %}
+{% if 'auto-snapshot' in config.system %}
+auto-snapshot;
+{% endif %}
+{% if 'domain-name' in config.system %}
+domain-name {{ config.system.get('domain-name') }};
+{% endif %}
+{% if 'domain-search' in config.system %}
+domain-search [ {{ config.system.get('domain-search') | join(' ') }} ];
+{% endif %}
+{% if 'time-zone' in config.system %}
+time-zone {{ config.system.get('time-zone') }};
+{% endif %}
+{% if 'authentication-order' in config.system %}
+authentication-order [ {{ config.system.get('authentication-order') | join(' ') }} ];
+{% endif %}
+{% if 'name-server' in config.system %}
+name-server {
+    {% for server in config.system.get('name-server') %}
+    {{ server.name }};
+    {% endfor %}
+}
+{% endif %}
+{% if 'radius-server' in config.system %}
+radius-server {
+    {% for server in config.system.get('radius-server') %}
+    {{ server.name }} {
+        secret "{{ server.secret }}"; ## SECRET-DATA
+        timeout {{ server.timeout }};
+    }
+    {% endfor %}
+}
+{% endif %}
+{% if 'radius-options' in config.system %}
+radius-options {
+    {% if 'attributes' in config.system.get('radius-options') %}
+    attributes {
+        {% if 'nas-ip-address' in config.system.get('radius-options').attributes %}
+        nas-ip-address {{ config.system.get('radius-options').attributes.get('nas-ip-address') }};
+        {% endif %}
+    }
+    {% endif %}
+}
+{% endif %}
+{% if 'syslog' in config.system %}
+syslog {
+    {% filter indent(4, true) %}
+    {% include 'ex/system/syslog.j2' %}
+    {% endfilter %}
+}
+{% endif %}
+{% if 'processes' in config.system %}
+processes {
+    {% filter indent(4, true) %}
+    {% include 'ex/system/processes.j2' %}
+    {% endfilter %}
+}
+{% endif %}
+{% if 'ntp' in config.system %}
+ntp {
+    {% filter indent(4, true) %}
+    {% include 'ex/system/ntp.j2' %}
+    {% endfilter %}
+}
+{% endif %}
+

@@ -1,0 +1,5 @@
+---
+# Directories
+root_dir: '{{ inventory_dir }}'
+config_dir_name: 'configs'
+config_dir: '{{ inventory_dir }}/{{ config_dir_name }}'

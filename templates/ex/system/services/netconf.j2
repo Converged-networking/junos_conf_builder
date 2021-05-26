@@ -1,0 +1,8 @@
+{% if 'ssh' in config.system.services.netconf %}
+ssh {
+    {% if 'port' in config.system.services.netconf.ssh %}
+    port {{ config.system.services.netconf.ssh.port }};
+    {% endif %}
+}
+{% endif %}
+

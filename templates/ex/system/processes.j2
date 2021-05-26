@@ -1,0 +1,21 @@
+{% if 'dhcp-service' in config.system.processes %}
+dhcp-service {
+    {% if 'traceoptions' in config.system.processes.get('dhcp-service') %}
+    traceoptions {
+        {% set t_options = config.system.processes.get('dhcp-service').traceoptions %}
+        {% if 'file' in t_options %}
+        file {{ t_options.file.filename }}{% if 'size' in t_options.file %} size {{ t_options.file.size }}{% endif %};
+        {% endif %}
+        {% if 'level' in t_options %}
+        level {{ t_options.level }};
+        {% endif %}
+        {% if 'flag' in t_options %}
+            {% for flag in t_options.flag %}
+        flag {{ flag.name }};
+            {% endfor %}
+        {% endif %}
+    }
+    {% endif %}
+}
+{% endif %}
+

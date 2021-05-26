@@ -1,0 +1,578 @@
+configuration:
+    version: 18.4R3.3
+    system:
+        commit:
+            synchronize:
+                - null
+        login:
+            retry-options:
+                tries-before-disconnect: 3
+                backoff-threshold: 1
+                backoff-factor: 6
+                minimum-time: 30
+                maximum-time: 60
+            user:
+                - 
+                    name: admin
+                    full-name: admin
+                    uid: 2000
+                    class: super-user
+                    authentication:
+                        encrypted-password: $5$ac606172c5011f97569a0b7960ae344e7d76d7b93eee312839b44694ccebcadd
+            message: "test message"
+        root-authentication:
+            encrypted-password: $5$ac606172c5011f97569a0b7960ae344e7d76d7b93eee312839b44694ccebcadd
+        services:
+            ssh:
+                root-login: deny
+                no-tcp-forwarding:
+                    - null
+                protocol-version:
+                    - v2
+                max-sessions-per-connection: 4
+                client-alive-count-max: 3
+                client-alive-interval: 10
+                connection-limit: 10
+                rate-limit: 10
+            netconf:
+                ssh:
+                    port: 830
+        host-name: test1
+        auto-snapshot:
+            - null
+        domain-name: test.io
+        domain-search:
+            - test.io
+            - test2.io
+        time-zone: Europe/Amsterdam
+        authentication-order:
+            - radius
+            - password
+        name-server:
+            - 
+                name: 10.0.0.1
+            - 
+                name: 10.0.0.2
+        radius-server:
+            - 
+                name: 10.0.0.3
+                secret: $9$n/Is9Cp0ORyrvgoJDkqzFSreWNbHkPTF/Yg
+                timeout: 5
+            - 
+                name: 10.0.0.4
+                secret: $9$n/Is9Cp0ORyrvgoJDkqzFSreWNbHkPTF/Yg
+                timeout: 5
+        radius-options:
+            attributes:
+                nas-ip-address: 1.1.1.1
+        syslog:
+            user:
+                - 
+                    name: '*'
+                    contents:
+                        - 
+                            name: any
+                            emergency:
+                                - null
+            host:
+                - 
+                    name: 10.0.0.5
+                    contents:
+                        - 
+                            name: any
+                            warning:
+                                - null
+                        - 
+                            name: authorization
+                            info:
+                                - null
+                        - 
+                            name: daemon
+                            info:
+                                - null
+                    match: '!(pfe_bcm_l2_mac_add|pfe_bcm_l2_mac_delete)'
+                    port: 40514
+            file:
+                - 
+                    name: messages
+                    contents:
+                        - 
+                            name: any
+                            warning:
+                                - null
+                        - 
+                            name: authorization
+                            info:
+                                - null
+                        - 
+                            name: daemon
+                            info:
+                                - null
+                    match: '!(pfe_bcm_l2_mac_add|pfe_bcm_l2_mac_delete)'
+                - 
+                    name: interactive-commands
+                    contents:
+                        - 
+                            name: interactive-commands
+                            any:
+                                - null
+                - 
+                    name: security
+                    contents:
+                        - 
+                            name: authorization
+                            info:
+                                - null
+                        - 
+                            name: interactive-commands
+                            info:
+                                - null
+        processes:
+            dhcp-service:
+                traceoptions:
+                    file:
+                        filename: dhcp_logfile
+                        size: 10m
+                    level: all
+                    flag:
+                        - 
+                            name: packet
+        ntp:
+            server:
+                - 
+                    name: 10.0.0.6
+                    prefer:
+                        - null
+    chassis:
+        redundancy:
+            graceful-switchover:
+                - null
+        aggregated-devices:
+            ethernet:
+                device-count: 2
+        alarm:
+            management-ethernet:
+                link-down: ignore
+    interfaces:
+        interface-range:
+            - 
+                name: uplink-range
+                member:
+                    - 
+                        name: xe-0/1/0
+                    - 
+                        name: xe-1/1/0
+                description: Uplink
+                ether-options:
+                    ieee-802.3ad:
+                        bundle: ae0
+            - 
+                name: office-range
+                member:
+                    - 
+                        name: ge-1/0/1
+                    - 
+                        name: ge-1/0/2
+                member-range:
+                    - 
+                        name: ge-1/0/4
+                        end-range: ge-1/0/19
+                    - 
+                        name: ge-0/0/2
+                        end-range: ge-0/0/30
+                description: 'Access: Kantoor'
+                unit:
+                    - 
+                        name: 0
+                        family:
+                            ethernet-switching:
+                                interface-mode: access
+            - 
+                name: downlink-range
+                member-range:
+                    - 
+                        name: ge-0/0/40
+                        end-range: ge-0/0/46
+                    - 
+                        name: ge-1/0/20
+                        end-range: ge-1/0/23
+                description: 'Trunk:'
+                native-vlan-id: 10
+                unit:
+                    - 
+                        name: 0
+                        family:
+                            ethernet-switching:
+                                interface-mode: trunk
+                                vlan:
+                                    members:
+                                        - L3-DCDB
+                                        - vl_10
+                                        - vl_101
+                                        - vl_130
+                                        - vl_603
+            - 
+                name: xe-interfaces
+                member:
+                    - 
+                        name: 'xe-*/*/*'
+        interface:
+            - 
+                name: ge-0/0/1
+                description: 'Access: test'
+                unit:
+                    - 
+                        name: 0
+                        family:
+                            ethernet-switching:
+                                interface-mode: access
+                                vlan:
+                                    members:
+                                        - vl_101
+            - 
+                name: ae0
+                description: Uplink
+                aggregated-ether-options:
+                    minimum-links: 1
+                    lacp:
+                        active:
+                            - null
+                unit:
+                    - 
+                        name: 0
+                        family:
+                            ethernet-switching:
+                                interface-mode: trunk
+                                vlan:
+                                    members:
+                                        - L3-DCDB
+                                        - vl_10
+                                        - vl_101
+                                        - vl_130
+                                        - vl_603
+            - 
+                name: irb
+                unit:
+                    - 
+                        name: 0
+                    - 
+                        name: 130
+                        family:
+                            inet:
+                                address:
+                                    - 
+                                        name: 1.1.1.1/24
+                    - 
+                        name: 190
+                        family:
+                            inet:
+                                address:
+                                    - 
+                                        name: 1.1.2.1/31
+                    - 
+                        name: 603
+                        family:
+                            inet:
+                                address:
+                                    - 
+                                        name: 1.1.3.5/24
+    snmp:
+        location: test-location
+        contact: test@test.io
+        filter-interfaces:
+            interfaces:
+                - 
+                    name: pip0
+                - 
+                    name: vme
+                - 
+                    name: 'vcp-*'
+            all-internal-interfaces:
+                - null
+        v3:
+            usm:
+                local-engine:
+                    user:
+                        - 
+                            name: test_snmp_user
+                            authentication-sha:
+                                authentication-key: $9$n/Is9Cp0ORyrvgoJDkqzFSreWNbHkPTF/Yg
+                            privacy-aes128:
+                                privacy-key: $9$n/Is9Cp0ORyrvgoJDkqzFSreWNbHkPTF/Yg
+            vacm:
+                security-to-group:
+                    security-model:
+                        - 
+                            name: usm
+                            security-name:
+                                - 
+                                    name: test_snmp_user
+                                    group: snmp_group
+                access:
+                    group:
+                        - 
+                            name: snmp_group
+                            default-context-prefix:
+                                security-model:
+                                    - 
+                                        name: any
+                                        security-level:
+                                            - 
+                                                name: none
+                                                read-view: snmp_view
+        engine-id:
+            local: 172.19.3.12
+        view:
+            - 
+                name: snmp_view
+                oid:
+                    - 
+                        name: '.1'
+                        include:
+                            - null
+    forwarding-options:
+        storm-control-profiles:
+            - 
+                name: default
+                all:
+                    - null
+        dhcp-relay:
+            server-group:
+                server-group:
+                    - 
+                        name: DHCP
+                        address:
+                            - 
+                                name: 10.0.0.7
+                            - 
+                                name: 10.0.0.8
+            active-server-group:
+                active-server-group: DHCP
+            group:
+                - 
+                    name: HDW
+                    interface:
+                        - 
+                            name: irb.130
+    policy-options:
+        prefix-list:
+            - 
+                name: mgmt-prefixes
+                prefix-list-item:
+                    - 
+                        name: 1.2.0.0/24
+                    - 
+                        name: 1.2.1.0/24
+            - 
+                name: ntp-servers
+                apply-path: 'system ntp server <*>'
+            - 
+                name: snmp-servers
+                apply-path: 'snmp community <*> clients <*>'
+            - 
+                name: localhost
+                prefix-list-item:
+                    - 
+                        name: 127.0.0.1/32
+            - 
+                name: radius-servers
+                apply-path: 'access radius-server <*>'
+        policy-statement:
+            - 
+                name: advertise-routes-through-rip
+                term:
+                    - 
+                        name: '1'
+                        from:
+                            protocol:
+                                - direct
+                            interface:
+                                - irb.603
+                                - lo0.1
+                        then:
+                            reject:
+                                - null
+                    - 
+                        name: '2'
+                        from:
+                            protocol:
+                                - direct
+                        then:
+                            accept:
+                                - null
+    access:
+        radius-server:
+            - 
+                name: 10.0.0.3
+                secret: $9$n/Is9Cp0ORyrvgoJDkqzFSreWNbHkPTF/Yg
+                timeout: 5
+                retry: 2
+            - 
+                name: 10.0.0.4
+                secret: $9$n/Is9Cp0ORyrvgoJDkqzFSreWNbHkPTF/Yg
+                timeout: 5
+                retry: 2
+        profile:
+            - 
+                name: DOT1X
+                authentication-order:
+                    - radius
+                radius:
+                    authentication-server:
+                        - 10.0.0.3
+                        - 10.0.0.4
+                    options:
+                        nas-identifier: dot1x-juniperEX
+    routing-options:
+        nonstop-routing:
+            - null
+        static:
+            route:
+                - 
+                    name: 10.0.0.0/24
+                    next-hop:
+                        - 172.19.3.1
+                - 
+                    name: 10.0.1.0/31
+                    next-hop:
+                        - 172.19.3.1
+                - 
+                    name: 10.0.2.0/24
+                    next-hop:
+                        - 172.19.3.1
+    protocols:
+        dot1x:
+            traceoptions:
+                file:
+                    filename: dot1x
+                    size: 5m
+                flag:
+                    - 
+                        name: all
+            authenticator:
+                authentication-profile-name: DOT1X
+                no-mac-table-binding:
+                    - null
+                radius-options:
+                    use-vlan-id:
+                        - null
+                interface:
+                    - 
+                        name: office-range
+                        supplicant: multiple
+                        retries: 3
+                        quiet-period: 5
+                        transmit-period: 5
+                        mac-radius:
+                            - null
+                        reauthentication: 3600
+                        supplicant-timeout: 5
+                        server-timeout: 10
+                        maximum-requests: 5
+                        guest-vlan: vl_4000
+                        server-reject-vlan:
+                            vlan-name: vl_4000
+                        server-fail:
+                            use-cache:
+                                - null
+        rip:
+            group:
+                - 
+                    name: rip-L3-trusted
+                    export:
+                        - advertise-routes-through-rip
+                    neighbor:
+                        - 
+                            name: irb.190
+        lldp:
+            advertisement-interval: 30
+            transmit-delay: 2
+            hold-multiplier: 4
+            lldp-configuration-notification-interval: 5
+            port-id-subtype: interface-name
+            port-description-type: interface-description
+            neighbour-port-info-display: port-id
+            interface:
+                - 
+                    name: all
+                    disable:
+                        - null
+                - 
+                    name: downlink-range
+        lldp-med:
+            interface:
+                - 
+                    name: all
+                    disable:
+                        - null
+                - 
+                    name: downlink-range
+                - 
+                    name: uplink-range
+        igmp-snooping:
+            vlan:
+                - 
+                    name: default
+        layer2-control:
+            bpdu-block:
+                disable-timeout: 300
+        rstp:
+            max-age: 20
+            hello-time: 2
+            forward-delay: 15
+            interface:
+                - 
+                    name: downlink-range
+                - 
+                    name: office-range
+                    edge:
+                        - null
+                    no-root-port:
+                        - null
+            bpdu-block-on-edge:
+                - null
+    poe:
+        interface:
+            - 
+                name: all
+    virtual-chassis:
+        preprovisioned:
+            - null
+        no-split-detection:
+            - null
+        member:
+            - 
+                name: 0
+                role: routing-engine
+                serial-number: JW0217480345
+            - 
+                name: 1
+                role: routing-engine
+                serial-number: JZ0213453453
+    vlans:
+        vlan:
+            - 
+                name: L3-DCDB
+                vlan-id: 190
+                l3-interface: irb.190
+            - 
+                name: default
+                vlan-id: 1
+                l3-interface: irb.0
+            - 
+                name: vl_10
+                vlan-id: 10
+            - 
+                name: vl_101
+                vlan-id: 101
+            - 
+                name: vl_130
+                vlan-id: 130
+                l3-interface: irb.130
+            - 
+                name: vl_603
+                vlan-id: 603
+                l3-interface: irb.603
+            - 
+                name: vl_4000
+                vlan-id: 4000

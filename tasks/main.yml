@@ -1,0 +1,23 @@
+---
+- name: "Create folder {{ config_dir_name }} generated config"
+  file:
+    path: "{{ config_dir }}"
+    state: directory
+    mode: 0755
+  delegate_to: localhost
+  run_once: True
+
+- name: Generate intended configuration
+  template:
+    src: junos-ex-intended-config.j2
+    dest: '{{ config_dir }}/{{ inventory_hostname }}.cfg'
+  delegate_to: localhost
+  register: junosconfig
+  tags: [build, provision]
+
+# - name: Generate device documentation
+#   template:
+#     src: junos-ex-intended-documentation.j2
+#     dest: '{{ doc_dir }}/{{ inventory_hostname }}.cfg'
+#   delegate_to: localhost
+#   tags: [build, provision]

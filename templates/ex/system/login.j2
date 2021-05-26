@@ -1,0 +1,34 @@
+{% if 'retry-options' in config.system.login %}
+retry-options {
+    {% set retry_options = config.system.login.get('retry-options') %}
+    {% if 'tries-before-disconnect' in retry_options %}
+    tries-before-disconnect {{ retry_options.get('tries-before-disconnect')}};
+    {% endif %}
+    {% if 'backoff-threshold' in retry_options %}
+    backoff-threshold {{ retry_options.get('backoff-threshold')}};
+    {% endif %}
+    {% if 'backoff-factor' in retry_options %}
+    backoff-factor {{ retry_options.get('backoff-factor')}};
+    {% endif %}
+    {% if 'minimum-time' in retry_options %}
+    minimum-time {{ retry_options.get('minimum-time')}};
+    {% endif %}
+    {% if 'maximum-time' in retry_options %}
+    maximum-time {{ retry_options.get('maximum-time')}};
+    {% endif %}
+}
+{% endif %}
+{% for user in config.system.login.user %}
+user {{ user.name }} {
+    full-name {{ user.get('full-name') }};
+    uid {{ user.get('uid') }};
+    class {{ user.get('class') }};
+    authentication {
+        encrypted-password "{{ user.authentication.get('encrypted-password') }}"; ## SECRET-DATA
+    }
+}
+{% endfor %}
+{% if 'message' in config.system.login %}
+message "{{ config.system.login.message }}";
+{% endif %}
+
