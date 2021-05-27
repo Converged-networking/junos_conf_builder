@@ -1,0 +1,12 @@
+{% if 'vlan' in section %}
+    {% for vlan in section.vlan %}
+{{ vlan.name }} {
+        {% if 'vlan-id' in vlan %}
+    vlan-id {{ vlan.get('vlan-id')}};
+        {% endif %}
+        {% if 'l3-interface' in vlan %}
+    l3-interface {{ vlan.get('l3-interface')}};
+        {% endif %}
+}
+    {% endfor %}
+{% endif %}
