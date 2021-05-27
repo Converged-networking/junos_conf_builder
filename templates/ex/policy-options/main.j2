@@ -1,0 +1,67 @@
+{% if 'prefix-list' in section %}
+    {% for pfx_list in section.get('prefix-list') %}
+prefix-list {{ pfx_list.name }} {
+        {% if 'prefix-list-item' in pfx_list %}
+            {% for pfx_item in pfx_list.get('prefix-list-item') %}
+    {{ pfx_item.name }};
+            {% endfor %}
+        {% endif %}
+        {% if 'apply-path' in pfx_list %}
+    apply-path "{{ pfx_list.get('apply-path') }}";
+        {% endif %}
+}
+    {% endfor %}
+{% endif %}
+{% if 'policy-statement' in section %}
+    {% for policy in section.get('policy-statement') %}
+policy-statement {{ policy.name }} {
+        {% if 'term' in policy %}
+            {% for term in policy.term %}
+    term {{ term.name }} {
+                {% if 'from' in term %}
+                    {% if term.from | flatten  | length > 1 %}
+                        {% set from_multiline = true %}
+        from {
+                    {% else %}
+                        {% set from_multiline = false %}
+                    {% endif %}
+                    {% if 'protocol' in term.from %}
+                        {% if term.from.protocol | length == 1 and from_multiline %}
+            protocol {{ term.from.protocol[0] }};
+                        {% elif term.from.protocol | length == 1 and not from_multiline %}
+        from protocol {{ term.from.protocol[0] }};
+                        {% else %}
+                            {{ 0/0 }} {# Not yet implemented: Multiple from protocols #}
+                        {% endif %}
+                    {% endif %}
+                    {% if 'interface' in term.from %}
+                        {% if term.from.interface | length == 1 and from_multiline %}
+            interface {{ term.from.interface[0] }};
+                        {% elif term.from.interface | length == 1 and not from_multiline%}
+        from interface {{ term.from.interface[0] }};
+                        {% elif from_multiline %}
+            interface [ {{ term.from.interface | join(' ') }} ];
+                        {% elif not from_multiline %}
+        from interface {{ term.from.interface[0] }};
+                        {% else %}
+                            {{ 0/0 }} {# Error: should never reacht this #}
+                        {% endif %}
+                    {% endif %}
+                    {% if from_multiline %}
+        }
+                    {% endif %}
+                {% endif %}
+                {% if 'then' in term %}
+                    {% if 'reject' in term.then %}
+        then reject;
+                    {% elif 'accept' in term.then%}
+        then accept;
+                    {% endif %}
+                {% endif %}
+    }
+            {% endfor %}
+        {% endif %}
+}
+    {% endfor %}
+{% endif %}
+

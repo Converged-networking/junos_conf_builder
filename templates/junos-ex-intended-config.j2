@@ -1,17 +1,19 @@
 #jinja2: lstrip_blocks: "true", trim_blocks: "false"
 {% set config = configuration %}
 {# Device Configuration #}
-{% for section in [
+{% for section_name in [
     'system',
     'chassis',
     'interfaces',
     'snmp',
     'forwarding-options',
+    'policy-options',
 ] %}
-    {% if section in config %}
-{{ section }} {
+    {% if section_name in config %}
+        {% set section = config.get(section_name) %}
+{{ section_name }} {
     {% filter indent(4, true) %}
-    {% include 'ex/' + section + '/main.j2' %}
+    {% include 'ex/' + section_name + '/main.j2' %}
     {% endfilter %}
 }
     {% endif %}
