@@ -1,9 +1,17 @@
 #jinja2: lstrip_blocks: "true", trim_blocks: "false"
 {% set config = configuration %}
 {# Device Configuration #}
-{# system settings #}
-system {
+{% set config_sections = [
+    'system',
+    'chassis',
+] %}
+{% for section in config_sections %}
+    {% if 'redundancy' in config.chassis %}
+{{ section }} {
     {% filter indent(4, true) %}
-    {% include 'ex/system/main.j2' %}
+    {% include 'ex/' + section + '/main.j2' %}
     {% endfilter %}
 }
+    {% endif %}
+{% endfor %}
+

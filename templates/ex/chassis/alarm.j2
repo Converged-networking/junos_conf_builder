@@ -1,0 +1,8 @@
+{% if 'management-ethernet' in config.chassis.alarm %}
+management-ethernet {
+    {% if 'link-down' in config.chassis.alarm.get('management-ethernet') %}
+    link-down ignore;
+    {% endif %}
+}
+{% endif %}
+

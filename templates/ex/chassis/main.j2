@@ -1,0 +1,9 @@
+{% for item in ['redundancy', 'aggregated-devices', 'alarm'] %}
+    {% if 'redundancy' in config.chassis %}
+{{ item }} {
+    {% filter indent(4, true) %}
+    {% include 'ex/chassis/' + item + '.j2' %}
+    {% endfilter %}
+}
+    {% endif %}
+{% endfor %}

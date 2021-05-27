@@ -1,0 +1,8 @@
+{% if 'ethernet' in config.chassis.get('aggregated-devices') %}
+ethernet {
+    {% if 'device-count' in config.chassis.get('aggregated-devices').ethernet %}
+    device-count {{ config.chassis.get('aggregated-devices').ethernet.get('device-count') }};
+    {% endif %}
+}
+{% endif %}
+
