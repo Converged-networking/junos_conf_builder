@@ -1,13 +1,13 @@
 #jinja2: lstrip_blocks: "true", trim_blocks: "false"
 {% set config = configuration %}
 {# Device Configuration #}
-{% set config_sections = [
+{% for section in [
     'system',
     'chassis',
     'interfaces',
+    'snmp',
 ] %}
-{% for section in config_sections %}
-    {% if 'redundancy' in config.chassis %}
+    {% if section in config %}
 {{ section }} {
     {% filter indent(4, true) %}
     {% include 'ex/' + section + '/main.j2' %}
