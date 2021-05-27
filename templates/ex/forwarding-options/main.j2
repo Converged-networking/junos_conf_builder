@@ -1,0 +1,41 @@
+{% if 'storm-control-profiles' in config.get('forwarding-options') %}
+    {% for s_cntrl_profile in config.get('forwarding-options').get('storm-control-profiles') %}
+storm-control-profiles {{ s_cntrl_profile.name }} {
+    {% if 'all' in s_cntrl_profile %}
+    all;
+    {% endif %}
+}
+    {% endfor %}
+{% endif %}
+{% if 'dhcp-relay' in config.get('forwarding-options') %}
+dhcp-relay {
+    {% if 'server-group' in config.get('forwarding-options').get('dhcp-relay') %}
+    server-group {
+        {% for s_group in config.get('forwarding-options').get('dhcp-relay').get('server-group').get('server-group') %}
+        {{ s_group.name }} {
+            {% if 'address' in s_group %}
+                {% for address in s_group.address %}
+            {{ address.name }}
+                {% endfor %}
+            {% endif %}
+        }
+        {% endfor %}
+    }
+    {% endif %}
+    {% if 'active-server-group' in config.get('forwarding-options').get('dhcp-relay') %}
+    active-server-group {{ config.get('forwarding-options').get('dhcp-relay').get('active-server-group').get('active-server-group') }};
+    {% endif %}
+    {% if 'group' in config.get('forwarding-options').get('dhcp-relay') %}
+        {% for group in config.get('forwarding-options').get('dhcp-relay').group %}
+    group {{ group.name }} {
+            {% if 'interface' in group %}
+                {% for interface in group.interface %}
+        interface {{ interface.name }};
+                {% endfor %}
+            {% endif %}
+    }
+        {% endfor %}
+    {% endif %}
+}
+{% endif %}
+
