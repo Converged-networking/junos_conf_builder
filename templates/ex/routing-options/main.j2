@@ -1,0 +1,12 @@
+{% if 'nonstop-routing' in section %}
+nonstop-routing;
+{% endif %}
+{% if 'static' in section %}
+static {
+    {% if 'route' in section.static %}
+        {% for route in section.static.route %}
+    route {{ route.name }} next-hop {{ route.get('next-hop')[0] }};
+        {% endfor %}
+    {% endif %}
+}
+{% endif %}
