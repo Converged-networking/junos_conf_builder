@@ -1,0 +1,127 @@
+{% if 'location' in config.snmp %}
+location "{{ config.snmp.location }}";
+{% endif %}
+{% if 'contact' in config.snmp %}
+contact "{{ config.snmp.contact }}";
+{% endif %}
+{% if 'filter-interfaces' in config.snmp %}
+filter-interfaces {
+    {% if 'interfaces' in config.snmp.get('filter-interfaces') %}
+    interfaces {
+        {% for interface in config.snmp.get('filter-interfaces').interfaces %}
+        "{{ interface.name }}";
+        {% endfor %}
+    }
+    {% endif %}
+    {% if 'all-internal-interfaces' in config.snmp.get('filter-interfaces') %}
+    all-internal-interfaces;
+    {% endif %}
+}
+{% endif %}
+{% if 'v3' in config.snmp %}
+v3 {
+    {% if 'usm' in config.snmp.v3 %}
+    usm {
+        {% if 'local-engine' in config.snmp.v3.usm %}
+        local-engine {
+            {% if 'user' in config.snmp.v3.usm.get('local-engine') %}
+                {% for user in config.snmp.v3.usm.get('local-engine').user %}
+            user {{ user.name }} {
+                    {% if 'authentication-sha' in user %}
+                authentication-sha {
+                        {% if 'authentication-key' in user.get('authentication-sha') %}
+                    authentication-key "{{ user.get('authentication-sha').get('authentication-key') }}"; ## SECRET-DATA
+                        {% endif %}
+                }
+                    {% endif %}
+                    {% if 'privacy-aes128' in user %}
+                privacy-aes128 {
+                        {% if 'privacy-key' in user.get('privacy-aes128') %}
+                    privacy-key "{{ user.get('privacy-aes128').get('privacy-key') }}"; ## SECRET-DATA
+                        {% endif %}
+                }
+                    {% endif %}
+            }
+                {% endfor %}
+            {% endif %}
+        }
+        {% endif %}
+    }
+    {% endif %}
+    {% if 'vacm' in config.snmp.v3 %}
+    vacm {
+        {% if 'security-to-group' in config.snmp.v3.vacm %}
+        security-to-group {
+            {% if 'security-model' in config.snmp.v3.vacm.get('security-to-group') %}
+                {% for sec_model in  config.snmp.v3.vacm.get('security-to-group').get('security-model') %}
+            security-model {{ sec_model.name }} {
+                    {% if 'security-name' in sec_model %}
+                        {% for sec_name in sec_model.get('security-name') %}
+                security-name {{ sec_name.name }} {
+                            {% if 'group' in sec_name %}
+                    group {{ sec_name.group }};
+                            {% endif %}
+                }
+                        {% endfor %}
+                    {% endif %}
+            }
+                {% endfor %}
+            {% endif %}
+        }
+        {% endif %}
+        {% if 'access' in config.snmp.v3.vacm %}
+        access {
+            {% if 'group' in config.snmp.v3.vacm.access %}
+                {% for access_group in config.snmp.v3.vacm.access.group %}
+            group {{ access_group.name }} {
+                    {% if 'default-context-prefix' in access_group %}
+                default-context-prefix {
+                        {% if 'security-model' in access_group.get('default-context-prefix') %}
+                            {% for sec_model in access_group.get('default-context-prefix').get('security-model') %}
+                    security-model {{ sec_model.name }} {
+                                {% if 'security-level' in sec_model %}
+                                    {% for sec_level in sec_model.get('security-level') %}
+                        security-level {{ sec_level.name }} {
+                                        {% if 'read-view' in sec_level %}
+                            read-view {{ sec_level.get('read-view') }};
+                                        {% endif %}
+                        }
+                                    {% endfor %}
+                                {% endif %}
+                    }
+                            {% endfor %}
+                        {% endif %}
+                }
+                    {% endif %}
+            }
+                {% endfor %}
+            {% endif %}
+        }
+        {% endif %}
+    }
+    {% endif %}
+}
+{% endif %}
+{% if 'engine-id' in config.snmp %}
+engine-id {
+    {% if 'local' in config.snmp.get('engine-id') %}
+    local {{ config.snmp.get('engine-id').local }};
+    {% endif %}
+}
+{% endif %}
+{% if 'view' in config.snmp %}
+    {% for snmp_view in config.snmp.view %}
+view {{ snmp_view.name }} {
+        {% if 'oid' in snmp_view %}
+            {% for oid in snmp_view.oid %}
+            {% if 'include' in oid %}
+    oid {{ oid.name }} include;
+            {% endif %}
+            {% if 'exclude' in oid %}
+    oid {{ oid.name }} exclude;
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+}
+    {% endfor %}
+{% endif %}
