@@ -442,13 +442,6 @@ configuration:
                         - 172.19.3.1
     protocols:
         dot1x:
-            traceoptions:
-                file:
-                    filename: dot1x
-                    size: 5m
-                flag:
-                    - 
-                        name: all
             authenticator:
                 authentication-profile-name: DOT1X
                 no-mac-table-binding:

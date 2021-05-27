@@ -6,6 +6,7 @@
     mode: 0755
   delegate_to: localhost
   run_once: True
+  check_mode: false
 
 - name: Generate intended configuration
   template:
@@ -14,6 +15,7 @@
   delegate_to: localhost
   register: junosconfig
   tags: [build, provision]
+  failed_when: ansible_check_mode and junosconfig.changed
 
 # - name: Generate device documentation
 #   template:
