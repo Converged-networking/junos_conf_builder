@@ -1,0 +1,18 @@
+{% if 'preprovisioned' in section %}
+preprovisioned;
+{% endif %}
+{% if 'no-split-detection' in section %}
+no-split-detection;
+{% endif %}
+{% if 'member' in section %}
+    {% for member in section.member %}
+member {{ member.name }} {
+        {% if 'role' in member %}
+    role {{ member.role }};
+        {% endif %}
+        {% if 'serial-number' in member %}
+    serial-number {{ member.get('serial-number') }};
+        {% endif %}
+}
+    {% endfor %}
+{% endif %}
