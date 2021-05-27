@@ -4,6 +4,7 @@
 {% set config_sections = [
     'system',
     'chassis',
+    'interfaces',
 ] %}
 {% for section in config_sections %}
     {% if 'redundancy' in config.chassis %}

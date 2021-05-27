@@ -1,0 +1,27 @@
+{% if 'family' in unit %}
+    {% if 'ethernet-switching' in unit.family %}
+family ethernet-switching {
+        {% set fam = unit.family.get('ethernet-switching') %}
+        {% if 'interface-mode' in fam %}
+    interface-mode {{ fam.get('interface-mode') }};
+        {% endif %}
+        {% if 'vlan' in fam %}
+    vlan {
+            {% if 'members' in fam.vlan and fam.vlan.members | length > 1 %}
+        members [ {{ fam.vlan.members | join(' ') }} ];
+            {% else %}
+        members {{ fam.vlan.members | join(' ') }};
+            {% endif %}
+    }
+        {% endif %}
+}
+    {% endif %}
+    {% if 'inet' in unit.family %}
+family inet {
+        {% if 'address' in unit.family.inet %}
+    address {{ unit.family.inet.address[0].name }};
+        {% endif %}
+}
+    {% endif %}
+{% endif %}
+

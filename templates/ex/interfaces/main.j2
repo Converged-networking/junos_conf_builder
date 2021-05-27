@@ -1,0 +1,15 @@
+{% for interface in config.interfaces.get('interface-range') %}
+interface-range {{ interface.name }} {
+    {% filter indent(4, true) %}
+        {% include 'ex/interfaces/interface.j2' %}
+    {% endfilter %}
+}
+{% endfor %}
+{% for interface in config.interfaces.interface %}
+{{ interface.name }} {
+    {% filter indent(4, true) %}
+        {% include 'ex/interfaces/interface.j2' %}
+    {% endfilter %}
+}
+{% endfor %}
+

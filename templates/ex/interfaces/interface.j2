@@ -1,0 +1,50 @@
+{% if 'member' in interface %}
+    {% for member in interface.member %}
+member {{ member.name }};
+    {% endfor %}
+{% endif %}
+{% if 'member-range' in interface %}
+    {% for member in interface.get('member-range') %}
+member-range {{ member.name }} to {{ member.get('end-range') }};
+    {% endfor %}
+{% endif %}
+{% if 'description' in interface %}
+description "{{ interface.description }}";
+{% endif %}
+{% if 'native-vlan-id' in interface %}
+native-vlan-id {{ interface.get('native-vlan-id') }};
+{% endif %}
+{% if 'aggregated-ether-options' in interface %}
+aggregated-ether-options {
+    {% if 'minimum-links' in interface.get('aggregated-ether-options') %}
+    minimum-links {{ interface.get('aggregated-ether-options').get('minimum-links') }};
+    {% endif %}
+    {% if 'lacp' in interface.get('aggregated-ether-options') %}
+    lacp {
+        {% if 'active' in interface.get('aggregated-ether-options').lacp %}
+        active;
+        {% endif %}
+    }
+    {% endif %}
+}
+{% endif %}
+{% if 'ether-options' in interface %}
+ether-options {
+    {% if 'ieee-802.3ad' in interface.get('ether-options') %}
+    802.3ad {{ interface.get('ether-options').get('ieee-802.3ad').bundle }};
+    {% endif %}
+}
+{% endif %}
+{% if 'unit' in interface %}
+    {% for unit in interface.unit %}
+        {% if unit | length == 1 %}
+unit {{ unit.name }};
+        {% else %}
+unit {{ unit.name }} {
+            {% filter indent(4, true) %}
+                {% include 'ex/interfaces/unit.j2' %}
+            {% endfilter %}
+}
+        {% endif %}
+    {% endfor %}
+{% endif %}
