@@ -1,0 +1,5 @@
+{% if 'interface' in section %}
+    {% for interface in section.interface %}
+interface {{ interface.name }};
+    {% endfor %}
+{% endif %}
