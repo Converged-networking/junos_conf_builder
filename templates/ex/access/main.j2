@@ -1,0 +1,44 @@
+{% if 'radius-server' in section %}
+radius-server {
+    {% for radius_server in section.get('radius-server') %}
+    {{ radius_server.name }} {
+        {% if 'secret' in radius_server %}
+        secret "{{ radius_server.secret }}";
+        {% endif %}
+        {% if 'timeout' in radius_server %}
+        timeout {{ radius_server.timeout }};
+        {% endif %}
+        {% if 'retry' in radius_server %}
+        retry {{ radius_server.retry }};
+        {% endif %}
+    }
+    {% endfor %}
+}
+{% endif %}
+{% if 'profile' in section %}
+    {% for profile in section.profile %}
+profile {{ profile.name }} {
+        {% if 'authentication-order' in profile and profile.get('authentication-order') | length == 1 %}
+    authentication-order {{ profile.get('authentication-order')[0] }};
+        {% elif 'authentication-order' in profile %}
+    authentication-order [ {{ profile.get('authentication-order') | join(' ') }} ];
+        {% endif %}
+        {% if 'radius' in profile %}
+    radius {
+            {% if 'authentication-server' in profile.radius and profile.radius.get('authentication-server') | length == 1%}
+        authentication-server {{ profile.radius.get('authentication-server')[0] }};
+            {% elif 'authentication-server' in profile.radius %}
+        authentication-server [ {{ profile.radius.get('authentication-server') | join(' ') }} ];
+            {% endif %}
+            {% if 'options' in profile.radius %}
+        options {
+                {% if 'nas-identifier' in profile.radius.options %}
+            nas-identifier {{ profile.radius.options.get('nas-identifier') }};
+                {% endif %}
+        }
+            {% endif %}
+    }
+        {% endif %}
+}
+    {% endfor %}
+{% endif %}
