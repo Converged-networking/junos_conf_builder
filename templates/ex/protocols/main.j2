@@ -1,0 +1,18 @@
+{% for proto_name in [
+    "dot1x",
+    "rip",
+    "lldp",
+    "lldp-med",
+    "igmp-snooping",
+    "layer2-control",
+    "rstp",
+] %}
+    {% if proto_name in config.protocols %}
+        {% set proto = config.protocols.get(proto_name) %}
+{{ proto_name }} {
+    {% filter indent(4, true) %}
+    {% include 'ex/protocols/' + proto_name + '.j2' %}
+    {% endfilter %}
+}
+    {% endif %}
+{% endfor %}

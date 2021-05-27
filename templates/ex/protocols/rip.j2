@@ -1,0 +1,16 @@
+{% if 'group' in proto %}
+    {% for group in proto.group %}
+group {{ group.name }} {
+        {% if 'export' in group and group.export | length == 1%}
+    export {{ group.export[0] }};
+        {% elif 'export' in group %}
+    {{ 0/0 }} {# Not yet implemented: Multiple exports #}
+        {% endif %}
+        {% if 'neighbor' in group and group.neighbor | length == 1%}
+    neighbor {{ group.neighbor[0].name }};
+        {% elif 'neighbor' in group %}
+    {{ 0/0 }} {# Not yet implemented: Multiple neighbors #}
+        {% endif %}
+}
+    {% endfor %}
+{% endif %}

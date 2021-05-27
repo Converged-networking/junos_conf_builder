@@ -1,0 +1,59 @@
+{% if 'authenticator' in proto %}
+authenticator {
+    {% if 'authentication-profile-name' in proto.authenticator %}
+    authentication-profile-name {{ proto.authenticator.get('authentication-profile-name') }};
+    {% endif %}
+    {% if 'no-mac-table-binding' in proto.authenticator %}
+    no-mac-table-binding;
+    {% endif %}
+    {% if 'radius-options' in proto.authenticator %}
+    radius-options {
+        {% if 'use-vlan-id' in proto.authenticator.get('radius-options') %}
+        use-vlan-id;
+        {% endif %}
+    }
+    {% endif %}
+    {% if 'interface' in proto.authenticator %}
+    interface {
+        {% for interface in proto.authenticator.interface %}
+        {{ interface.name }} {
+            {% for parameter in [
+                'supplicant',
+                'retries',
+                'quiet-period',
+                'transmit-period',
+            ] %}
+                {% if parameter in interface %}
+            {{ parameter }} {{ interface.get(parameter) }};
+                {% endif %}
+            {% endfor %}
+            {% if 'mac-radius' in interface %}
+            mac-radius;
+            {% endif %}
+            {% for parameter in [
+                'reauthentication',
+                'supplicant-timeout',
+                'server-timeout',
+                'maximum-requests',
+                'guest-vlan',
+            ] %}
+                {% if parameter in interface %}
+            {{ parameter }} {{ interface.get(parameter) }};
+                {% endif %}
+            {% endfor %}
+            {% if 'server-reject-vlan' in interface %}
+                {% if 'vlan-name' in interface.get('server-reject-vlan') %}
+            server-reject-vlan {{ interface.get('server-reject-vlan').get('vlan-name') }};
+                {% endif %}
+            {% endif %}
+            {% if 'server-fail' in interface %}
+                {% if 'use-cache' in interface.get('server-fail') %}
+            server-fail use-cache;
+                {% endif %}
+            {% endif %}
+        }
+        {% endfor %}
+    {% endif %}
+    }
+}
+{% endif %}

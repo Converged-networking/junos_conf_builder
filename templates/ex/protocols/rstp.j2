@@ -1,0 +1,28 @@
+{% for parameter in [
+    'max-age',
+    'hello-time',
+    'forward-delay',
+] %}
+    {% if parameter in proto %}
+{{ parameter }} {{ proto.get(parameter) }};
+    {% endif %}
+{% endfor %}
+{% if 'interface' in proto %}
+    {% for interface in proto.interface %}
+        {% if interface | length > 1 %}
+interface {{ interface.name }} {
+            {% if 'edge' in interface %}
+    edge;
+            {% endif %}
+            {% if 'no-root-port' in interface %}
+    no-root-port;
+            {% endif %}
+}
+        {% else %}
+interface {{ interface.name }};
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% if 'bpdu-block-on-edge' in proto %}
+bpdu-block-on-edge;
+{% endif %}

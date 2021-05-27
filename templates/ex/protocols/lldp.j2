@@ -1,0 +1,26 @@
+{% for parameter in [
+    'advertisement-interval',
+    'transmit-delay',
+    'hold-multiplier',
+    'lldp-configuration-notification-interval',
+    'port-id-subtype',
+    'port-description-type',
+    'neighbour-port-info-display',
+] %}
+    {% if parameter in proto %}
+{{ parameter }} {{ proto.get(parameter) }};
+    {% endif %}
+{% endfor %}
+{% if 'interface' in proto %}
+    {% for interface in proto.interface %}
+        {% if interface | length > 1 %}
+interface {{ interface.name }} {
+            {% if 'disable' in interface %}
+    disable;
+            {% endif %}
+}
+        {% else %}
+interface {{ interface.name }};
+        {% endif %}
+    {% endfor %}
+{% endif %}

@@ -1,0 +1,5 @@
+{% if 'vlan' in proto %}
+    {% for vlan in proto.vlan %}
+vlan {{ vlan.name }};
+    {% endfor %}
+{% endif %}

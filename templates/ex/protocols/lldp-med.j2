@@ -1,0 +1,13 @@
+{% if 'interface' in proto %}
+    {% for interface in proto.interface %}
+        {% if interface | length > 1 %}
+interface {{ interface.name }} {
+            {% if 'disable' in interface %}
+    disable;
+            {% endif %}
+}
+        {% else %}
+interface {{ interface.name }};
+        {% endif %}
+    {% endfor %}
+{% endif %}

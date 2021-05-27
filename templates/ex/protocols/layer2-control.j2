@@ -1,0 +1,7 @@
+{% if 'bpdu-block' in proto %}
+bpdu-block {
+    {% if 'disable-timeout' in proto.get('bpdu-block') %}
+    disable-timeout {{ proto.get('disable-timeout') }};
+    {% endif %}
+}
+{% endif %}
