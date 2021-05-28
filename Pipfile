@@ -4,12 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-ansible = "*"
+ansible = ">=4.0.0"
 selinux = "*"
-invoke = "*"
 
 [dev-packages]
 yamllint = "*"
+invoke = "*"
 
 [requires]
 python_version = "3.8"
