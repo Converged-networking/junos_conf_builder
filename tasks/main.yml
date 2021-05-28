@@ -15,7 +15,7 @@
   delegate_to: localhost
   register: junosconfig
   tags: [build, provision]
-  failed_when: ansible_check_mode and junosconfig.changed
+  failed_when: junosconfig.failed or ansible_check_mode and junosconfig.changed
 
 # - name: Generate device documentation
 #   template:
