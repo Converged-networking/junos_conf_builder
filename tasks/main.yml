@@ -5,7 +5,7 @@
     state: directory
     mode: 0755
   delegate_to: localhost
-  run_once: True
+  run_once: true
   check_mode: false
 
 - name: Generate intended configuration
