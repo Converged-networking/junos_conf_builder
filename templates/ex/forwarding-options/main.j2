@@ -15,7 +15,7 @@ dhcp-relay {
         {{ s_group.name }} {
             {% if 'address' in s_group %}
                 {% for address in s_group.address %}
-            {{ address.name }}
+            {{ address.name }};
                 {% endfor %}
             {% endif %}
         }

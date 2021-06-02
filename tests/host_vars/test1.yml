@@ -346,12 +346,12 @@ configuration:
             nas-identifier: dot1x-juniperEX
   routing-options:
     nonstop-routing:
-      - null
     static:
       route:
         - name: 10.0.0.0/24
           next-hop:
             - 172.19.3.1
+          no-readvertise:
         - name: 10.0.1.0/31
           next-hop:
             - 172.19.3.1
@@ -419,6 +419,7 @@ configuration:
       bpdu-block:
         disable-timeout: 300
     rstp:
+      bridge-priority: 28k
       max-age: 20
       hello-time: 2
       forward-delay: 15
