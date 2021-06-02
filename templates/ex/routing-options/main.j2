@@ -5,7 +5,16 @@ nonstop-routing;
 static {
     {% if 'route' in section.static %}
         {% for route in section.static.route %}
+            {% if route | length == 2 %}
     route {{ route.name }} next-hop {{ route.get('next-hop')[0] }};
+            {% else %}
+    route {{ route.name }} {
+        next-hop {{ route.get('next-hop')[0] }};
+        {% if 'no-readvertise' in route %}
+        no-readvertise;
+        {% endif %}
+    }
+            {% endif %}
         {% endfor %}
     {% endif %}
 }
