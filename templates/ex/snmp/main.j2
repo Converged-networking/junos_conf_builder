@@ -31,6 +31,8 @@ v3 {
                 authentication-sha {
                         {% if 'authentication-key' in user.get('authentication-sha') %}
                     authentication-key "{{ user.get('authentication-sha').get('authentication-key') }}"; ## SECRET-DATA
+                        {% elif 'authentication-password' in user.get('authentication-sha') %}
+                    authentication-password "{{ user.get('authentication-sha').get('authentication-password') }}";
                         {% endif %}
                 }
                     {% endif %}
@@ -38,6 +40,8 @@ v3 {
                 privacy-aes128 {
                         {% if 'privacy-key' in user.get('privacy-aes128') %}
                     privacy-key "{{ user.get('privacy-aes128').get('privacy-key') }}"; ## SECRET-DATA
+                        {% elif 'privacy-password' in user.get('privacy-aes128') %}
+                    privacy-password "{{ user.get('privacy-aes128').get('privacy-password') }}";
                         {% endif %}
                 }
                     {% endif %}
