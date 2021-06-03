@@ -1,9 +1,12 @@
 {% for interface in config.interfaces.get('interface-range') %}
+    {% if ('member' in interface and interface.member)
+       or ('member-range' in interface and interface.get('member-range')) -%}  
 interface-range {{ interface.name }} {
-    {% filter indent(4, true) %}
-        {% include 'ex/interfaces/interface.j2' %}
-    {% endfilter %}
+        {% filter indent(4, true) %}
+            {% include 'ex/interfaces/interface.j2' %}
+        {% endfilter %}
 }
+    {% endif %}
 {% endfor %}
 {% for interface in config.interfaces.interface %}
 {{ interface.name }} {
@@ -12,4 +15,3 @@ interface-range {{ interface.name }} {
     {% endfilter %}
 }
 {% endfor %}
-

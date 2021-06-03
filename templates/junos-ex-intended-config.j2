@@ -18,9 +18,9 @@
     {% if section_name in config %}
         {% set section = config.get(section_name) %}
 {{ section_name }} {
-    {% filter indent(4, true) %}
-    {% include 'ex/' + section_name + '/main.j2' %}
-    {% endfilter %}
+        {% filter indent(4, true) %}
+            {% include 'ex/' + section_name + '/main.j2' %}
+        {% endfilter %}
 }
     {% endif %}
 {% endfor %}
