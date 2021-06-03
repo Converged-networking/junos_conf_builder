@@ -3,7 +3,7 @@ radius-server {
     {% for radius_server in section.get('radius-server') %}
     {{ radius_server.name }} {
         {% if 'secret' in radius_server %}
-        secret "{{ radius_server.secret }}";
+        secret "{{ radius_server.secret }}"; ## SECRET-DATA
         {% endif %}
         {% if 'timeout' in radius_server %}
         timeout {{ radius_server.timeout }};
