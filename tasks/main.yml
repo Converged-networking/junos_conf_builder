@@ -6,6 +6,7 @@
   delegate_to: localhost
   run_once: true
   check_mode: false
+  when: test_mode is not defined or (test_mode is defined and not test_mode)
 
 - name: "Create folder {{ config_dir_name }} for generated config"
   file:
