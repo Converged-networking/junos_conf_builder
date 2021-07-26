@@ -1,9 +1,18 @@
 ---
-- name: "Create folder {{ config_dir_name }} generated config"
+- name: "Cleanup {{ config_dir_name }} for generated config"
+  file:
+    path: "{{ config_dir }}"
+    state: absent
+  delegate_to: localhost
+  run_once: true
+  check_mode: false
+
+- name: "Create folder {{ config_dir_name }} for generated config"
   file:
     path: "{{ config_dir }}"
     state: directory
     mode: 0755
+    recurse: true
   delegate_to: localhost
   run_once: true
   check_mode: false
