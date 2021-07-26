@@ -2,6 +2,8 @@
 - hosts: test1
   connection: local
   gather_facts: false
+  vars:
+    test_mode: true
 
   roles:
     - .
