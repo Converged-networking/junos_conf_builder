@@ -13,6 +13,7 @@
     path: "{{ config_dir }}"
     state: directory
     mode: 0755
+    recurse: true
   delegate_to: localhost
   run_once: true
   check_mode: false
