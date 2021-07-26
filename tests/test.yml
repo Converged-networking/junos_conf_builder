@@ -4,6 +4,7 @@
   gather_facts: false
   vars:
     test_mode: true
+    output_dir: "{{ playbook_dir }}"
 
   roles:
     - .
