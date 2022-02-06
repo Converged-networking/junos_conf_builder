@@ -1,3 +1,8 @@
+# DO NOT USE
+
+This repo is read only and I've archived this for personal use. I've realised this is a dumb way to to this as this is just a convoluted way of transposing between YAML and JSON and there are libraries for that and do a much better job.
+
+
 # junos_conf_builder
 
 **junos_conf_builder** is a role that generates Junos OS configuration from parameters native to ansible. The data model used as input is based on the output of `show configuration | display json`, when converted to YAML this is the exact input for this model.
